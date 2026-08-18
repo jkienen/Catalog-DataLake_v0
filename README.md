@@ -1,42 +1,31 @@
 # Data Lake Documentation Template (Legacy)
 
+> A Data Lake concept in a single spreadsheet — every source, rule and automation mapped in one consistent, auditable place.
 
-> A Data Lake concept in a single spreadsheet, mapping every source, rule, and automation in one consistent, auditable place.
+> 🔻 **This is the legacy version.** The active catalog is [`Catalog-DataLake_v1`](https://github.com/jkienen/Catalog-DataLake_v1):
+>
+> - one YAML file per entry, not one row in a shared sheet
+> - filled by an AI skill reading the code, not by hand
+> - Audit promoted to its own layer, and the whole thing rendered as a browsable graph
 
----
-
-> ℹ️ A newer version of this project is available [here](https://github.com/jkienen/Catalog-DataLake_v1).
-
----
-
-## Why This Matters
-
-Automations save time, but every one of them is a decision made on someone's behalf, silently, on a schedule, using logic only the person who wrote it can see. As they multiply across teams and platforms, that convenience turns into risk:
-
-- **No one owns the full picture.** Automations get built script by script, each with its own credentials, schedule, and hard-coded rule. Ask "what automatically deletes, tags, or closes something in production right now?" and the honest answer is usually "let me check with a few people."
-- **Evidence disappears with the action.** An automation that deletes or closes a record also removes the only proof it existed. When an audit, an incident, or a customer complaint asks "why is this record gone," there is nothing to point to.
-- **Duplicated effort.** Without a shared catalog, two teams solve the same problem twice, slightly differently, against the same source system, doubling the maintenance burden and the number of places a bug can hide.
-- **Institutional risk.** The rule that decides what gets changed or deleted lives in one person's script, in one person's head. When that person is unavailable, nobody can safely extend, or even fully trust, what the automation does.
-
-A Data Lake documented this way turns each of those into a reviewable fact instead of tribal knowledge: every automation listed once with its trigger, filters, source data and owner; an **Audit** layer that keeps the record of what was acted on even after the action removes it from the source; sources and rules referenced instead of re-copied, so the second team reuses instead of rebuilding.
-
-That is the case worth making to a manager: not "we documented our data," but **"we can show, at any moment, everything that acts on our systems automatically, why it does it, and what it did, before an incident forces us to find out the hard way."**
+<p align="center">
+  <img src="Files/architecture-concept.png" alt="Data Lake concept diagram: EDR, SIEM and PAM sources feed the Raw layer, transformed into Silver by business rules, branching into Gold indicators that answer business questions and into Automations that apply fixes back to the sources.">
+</p>
 
 ---
 
-## Overview
+## What the Workbook Got Right, and Where It Stopped Scaling
 
-As a Data Lake grows, the hardest thing to keep is not the data; it is the *knowledge* about the data: where each source comes from, how it is transformed, what each indicator means, and which automations act on it. That knowledge usually lives scattered across people, scripts, and chat history.
+The workbook centralizes the knowledge a growing Data Lake usually scatters across people, scripts and chat history: where each source comes from, how it is transformed, what each indicator means, which automations act on it. One row per source, rule or automation, the same fields every time, organized around the medallion architecture (Raw → Silver → Gold) plus an Automations layer — no tooling required, and it runs anywhere a spreadsheet does.
 
-This template centralizes that knowledge in a single workbook, organized around the **medallion architecture** (Raw → Silver → Gold) plus an **Automations** layer. Each row documents one source, rule, or automation using the same fields, so anyone can read, or extend, the documentation without guessing.
+It stopped scaling for three reasons. **Documenting one automation took a full day** — an analyst reading the code, then transcribing every endpoint, filter, transformation and KPI by hand. **The sheets grew into the thousands of rows**, and finding one entry, or spotting a duplicate, meant scrolling and filtering across sheets never built to hold that much. **Consistency depended on discipline, not structure** — nothing stopped two rows from describing the same rule differently, or a field from being skipped, because a cell enforces no shape.
 
-> 📝 **The content currently in the workbook is illustrative only.** It exists to show *how* to fill each field. Replace every example row with your own sources, rules, and indicators.
+[`Catalog-DataLake_v1`](https://github.com/jkienen/Catalog-DataLake_v1) keeps every idea this version got right and changes how entries get produced and read — see its README for what that looks like.
 
 ---
 
-## How It Works
-
-![Data Lake architecture: sources (EDR, SIEM, PAM) flow into the Raw, Silver, and Gold layers, feeding business answers, automations, and fixes.](Files/architecture-concept.png)
+<details>
+<summary><strong>How It Works</strong> (click to expand)</summary>
 
 The documentation mirrors the lifecycle of the data across four layers:
 
@@ -54,18 +43,21 @@ The documentation mirrors the lifecycle of the data across four layers:
 
 Each layer feeds the next: Raw is the input to the Silver rules, the Silver output is consolidated into Gold indicators, and Automations consume the curated datasets to act.
 
-<details style="border:1px solid #57606a;border-radius:6px;padding:12px 16px;margin-bottom:16px;">
+<details>
 <summary><strong>Detailed architecture</strong> (click to expand)</summary>
 
-The diagram above shows the concept; this is the same flow at dataset level, with sources, endpoints, Silver/Gold groupings and automations all named individually.
+The diagram above shows the concept; this is the same flow at dataset level, with sources, endpoints, Silver/Audit/Gold groupings and automations all named individually.
 
-![Detailed Data Lake architecture: every Raw endpoint, Silver/Audit/Gold dataset and Automation routine, grouped by source and project.](Files/architecture-full.png)
+<p align="center">
+  <img src="Files/architecture-full.png" alt="Detailed Data Lake architecture: every Raw endpoint, Silver/Audit/Gold dataset and Automation routine, grouped by source and project.">
+</p>
 
 </details>
 
----
+</details>
 
-## Workbook Structure
+<details>
+<summary><strong>Workbook Structure</strong> (click to expand)</summary>
 
 The template has three sheets. Fill **one row per item**.
 
@@ -73,10 +65,12 @@ The template has three sheets. Fill **one row per item**.
 
 Documents every source endpoint feeding the Raw layer.
 
-<details style="border:1px solid #57606a;border-radius:6px;padding:12px 16px;margin-bottom:16px;">
+<details>
 <summary><strong>Sheet preview</strong> (click to expand)</summary>
 
-![Endpoints (Raw) sheet: CrowdStrike platform with USB Query and USB Policies endpoints, status, and extraction ownership notes.](Files/Level-l.png)
+<p align="center">
+  <img src="Files/Level-l.png" alt="Endpoints (Raw) sheet: CrowdStrike platform with USB Query and USB Policies endpoints, status, and extraction ownership notes.">
+</p>
 
 </details>
 
@@ -108,10 +102,12 @@ Documents every source endpoint feeding the Raw layer.
 
 Documents how Raw data becomes structured Silver datasets, and the Gold indicators derived from them.
 
-<details style="border:1px solid #57606a;border-radius:6px;padding:12px 16px;margin-bottom:16px;">
+<details>
 <summary><strong>Sheet preview</strong> (click to expand)</summary>
 
-![Business Rules (Silver & Gold) sheet: Vulnerability Management context with status, review date, and the four Gold indicators (fixed vulns, MTTR by severity) with calculation and rationale.](Files/Level-ll.png)
+<p align="center">
+  <img src="Files/Level-ll.png" alt="Business Rules (Silver & Gold) sheet: Vulnerability Management context with status, review date, and the four Gold indicators (fixed vulns, MTTR by severity) with calculation and rationale.">
+</p>
 
 </details>
 
@@ -143,10 +139,12 @@ Documents how Raw data becomes structured Silver datasets, and the Gold indicato
 
 Documents automations that consume the curated data to act on the environment.
 
-<details style="border:1px solid #57606a;border-radius:6px;padding:12px 16px;margin-bottom:16px;">
+<details>
 <summary><strong>Sheet preview</strong> (click to expand)</summary>
 
-![Automations sheet: Tag Synchronization, Unwatched Assets Cleanup, and Removal of Unused Exceptions routines with status, sources, frequency, schedule, and filters.](Files/Level-lll.png)
+<p align="center">
+  <img src="Files/Level-lll.png" alt="Automations sheet: Tag Synchronization, Unwatched Assets Cleanup, and Removal of Unused Exceptions routines with status, sources, frequency, schedule, and filters.">
+</p>
 
 </details>
 
@@ -168,9 +166,12 @@ Documents automations that consume the curated data to act on the environment.
 </tbody>
 </table>
 
----
+</details>
 
-## How to Use
+<details>
+<summary><strong>How to Use</strong> (click to expand)</summary>
+
+> 📝 **The content currently in the workbook is illustrative only.** It exists to show *how* to fill each field. Replace every example row with your own sources, rules, and indicators.
 
 1. Pick the sheet for what you are documenting (a source, a rule, or an automation).
 2. Add **one row** and fill every applicable field, using the dropdowns for `Status`.
@@ -179,6 +180,8 @@ Documents automations that consume the curated data to act on the environment.
 5. Keep a representative **sample** in the `Sample` / `Output` field; it is the fastest way for a reader to understand the data shape.
 
 > ✅ Treat the workbook as living documentation: review entries periodically and keep `Status` and `Last Review Date` up to date.
+
+</details>
 
 ---
 
