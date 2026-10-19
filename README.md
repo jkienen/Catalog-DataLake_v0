@@ -187,4 +187,4 @@ Documents automations that consume the curated data to act on the environment.
 
 ## License
 
-Provided as-is for reference and reuse. Adapt it freely to your environment.
+Released under the MIT License: use, adapt and redistribute it freely. Full terms in [LICENCE.md](LICENCE.md).
